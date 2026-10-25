@@ -10,8 +10,8 @@ button,input{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:
 .skip-link{position:fixed;top:-110px;left:15px;z-index:500;border-radius:10px;background:white;padding:12px 20px;color:#130c21}
 .skip-link:focus{top:15px}
 .shell{width:min(100%,1600px);padding-inline:clamp(20px,5.3vw,91px);margin-inline:auto}
-.experience{position:relative;isolation:isolate;width:100%;height:100svh;min-height:640px;overflow:hidden;background:#070811}
-.scene-stage{position:absolute;inset:0;z-index:-1;overflow:hidden;isolation:isolate;pointer-events:none;background:radial-gradient(ellipse 63% 70% at 77% 48%,#24203e 0%,#111024 40%,#070913 79%)}
+.experience{position:relative;isolation:isolate;width:100%;height:100svh;min-height:640px;overflow:hidden;background:#070811;touch-action:pan-y}
+.scene-stage{position:absolute;inset:0;z-index:0;overflow:hidden;isolation:isolate;pointer-events:none;background:radial-gradient(ellipse 63% 70% at 77% 48%,#24203e 0%,#111024 40%,#070913 79%)}
 .scene-stage::before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:linear-gradient(90deg,rgba(8,8,19,.91) 0%,rgba(8,8,19,.86) 17%,rgba(8,8,19,.58) 35%,rgba(8,8,19,.11) 62%,rgba(8,8,19,.07) 100%),linear-gradient(0deg,rgba(7,7,17,.80) 0%,transparent 22%,transparent 78%,rgba(7,7,17,.43) 100%);will-change:auto}
 .scene-stage::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse 75% 70% at 80% 45%,transparent 9%,rgba(5,5,14,.30) 80%)}
 .scene-glow{position:absolute;border-radius:50%;pointer-events:none;filter:blur(75px);mix-blend-mode:screen;opacity:.6;will-change:transform;animation:glowDrift 17s ease-in-out infinite alternate}
@@ -23,7 +23,7 @@ button,input{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:
 .scene-stage.ready #sceneCanvas{opacity:1}
 .scene-fallback{--cols:27;--rows:17;position:absolute;inset:-4%;display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));grid-template-rows:repeat(var(--rows),minmax(0,1fr));gap:1px;transform:perspective(900px) rotateY(-3deg) scale(1.05);z-index:2;overflow:hidden;transition:opacity .85s ease}
 .scene-stage.ready .scene-fallback{opacity:0}
-.scene-fallback i{position:relative;display:block;min-width:0;min-height:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:linear-gradient(139deg,rgba(233,205,255,.9) 0%,rgba(125,102,186,.66) 15%,#1a182e 47%,#0b0d1e 66%,rgba(104,70,169,.65));border:0;box-shadow:inset 2px 2px 0 rgba(255,255,255,.24);filter:brightness(var(--brightness,1));opacity:var(--opacity,.85);transform:translate3d(0,0,var(--lift,0px)) scale(.98);transition:transform .31s var(--ease),filter .31s ease}
+.scene-fallback i{position:relative;display:block;min-width:0;min-height:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:linear-gradient(139deg,color-mix(in srgb,var(--accent) 60%,#f9e6ff) 0%,color-mix(in srgb,var(--accent2) 64%,#766c9c) 15%,#1a182e 47%,#0b0d1e 66%,color-mix(in srgb,var(--accent2) 60%,#473164));border:0;box-shadow:inset 2px 2px 0 rgba(255,255,255,.24);filter:brightness(var(--brightness,1));opacity:var(--opacity,.85);transform:translate3d(0,0,var(--lift,0px)) scale(.98);transition:transform .31s var(--ease),filter .31s ease}
 .scene-fallback i::after{content:"";position:absolute;inset:13%;background:linear-gradient(135deg,rgba(249,226,255,.30),transparent 40%,rgba(18,9,51,.4));clip-path:inherit}
 .masthead{position:relative;z-index:30;height:105px;display:flex;align-items:center;gap:20px;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:13px;flex:0 0 auto}
@@ -137,3 +137,6 @@ button,input{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:
 @media(max-height:620px) and (max-width:640px){.experience{min-height:600px}.hero-content{padding-bottom:105px}.hero-footnote{display:none}}
 @media(hover:none),(pointer:coarse){.scene-fallback i{transition-duration:.2s}.scene-grain{opacity:.08}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.scene-glow{will-change:auto}}
+
+@media(max-width:640px){.experience{touch-action:none}}
+.experience.paused .scene-glow,.experience.paused .reactivity-icon i{animation-play-state:paused}
