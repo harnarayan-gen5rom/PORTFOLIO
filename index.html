@@ -1,91 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harnarayan Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090813">
+  <meta name="description" content="PRISM FIELD — a full-screen, interactive 3D proximity experience by Harnarayan. Move to reshape a responsive field of iridescent metal.">
+  <meta property="og:title" content="PRISM FIELD — Harnarayan / Interactive 3D">
+  <meta property="og:description" content="The environment reacts to you. Enter a cinematic interactive 3D experiment.">
+  <title>PRISM FIELD — Harnarayan | Interactive 3D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=prism-1">
+  <script defer src="./script.js?v=prism-1"></script>
+  <script defer src="./scene.js?v=prism-1"></script>
 </head>
 <body>
-    <body>
-<div class="nav">
-<div class="brand">
-<div class="logo">Gen5</div>
-<div class="nav-info">
-<div style="font-weight:700">Harnarayan</div>
-<div style="font-size:12px;color:rgba(255,255,255,0.45)">Creative Visual Artist</div>
-</div>
-</div>
+  <a class="skip-link" href="#experience">Skip to experience</a>
 
+  <main class="experience" id="experience">
+    <div class="scene-stage" id="sceneStage" aria-hidden="true">
+      <div class="scene-glow glow-one"></div>
+      <div class="scene-glow glow-two"></div>
+      <div class="scene-fallback" id="sceneFallback"></div>
+      <canvas id="sceneCanvas"></canvas>
+      <div class="scene-grain"></div>
+      <div class="scene-vignette"></div>
+    </div>
 
-<nav class="navlinks" aria-label="Primary">
-<a href="#work">Work</a>
-<a href="#services">Services</a>
-<a href="#about">About</a>
-</nav>
+    <header class="masthead shell">
+      <a class="brand" href="#experience" aria-label="Prism Field home">
+        <span class="brand-glyph" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-copy"><strong>GEN<span>5</span>ROM</strong><small>EXPERIMENTAL / 001</small></span>
+      </a>
 
+      <nav class="top-nav" aria-label="Explore the portfolio">
+        <a class="current" href="#experience" aria-current="page">Experience</a>
+        <a href="https://harnarayan-gen5rom.github.io/GEN5ROM/" target="_blank" rel="noopener noreferrer">Original portfolio <span aria-hidden="true">↗</span></a>
+        <a href="https://gen5rom-cyber.vercel.app/" target="_blank" rel="noopener noreferrer">Cyber edition <span aria-hidden="true">↗</span></a>
+      </nav>
 
-<div class="nav-actions">
-<button class="btn">Contact</button>
-<button class="btn resume">Resume</button>
-</div>
-</div>
+      <a class="nav-contact" href="https://harnarayan-gen5rom.github.io/GEN5ROM/#contact" target="_blank" rel="noopener noreferrer"><span class="status-dot" aria-hidden="true"></span> LET'S CONNECT <span aria-hidden="true">↗</span></a>
+    </header>
 
+    <section class="hero-content shell" aria-labelledby="heroTitle">
+      <div class="hero-block">
+        <div class="hero-kicker"><span class="kicker-line"></span> AN INTERACTIVE 3D EXPERIENCE <span class="kicker-code">/ NO. 001</span></div>
+        <h1 id="heroTitle">Matter<br>meets <span class="headline-gradient">motion<span class="dot">.</span></span></h1>
+        <p class="hero-description">A living field of sculpted light. Move your cursor and watch the entire world bend toward you.</p>
+        <div class="hero-buttons">
+          <button class="primary-button" id="activateBtn" type="button">
+            <span>Wake the field</span>
+            <span class="button-icon" aria-hidden="true">↗</span>
+          </button>
+          <button class="secondary-button" id="reelBtn" type="button"><span class="play-icon" aria-hidden="true">▶</span> Watch my work</button>
+        </div>
+        <div class="hero-footnote"><span class="micro-star">✳</span> DESIGNED TO BE FELT. NOT JUST SEEN.</div>
+      </div>
+    </section>
 
-<main class="hero">
-<div style="position:relative;z-index:10">
-<span class="eyebadge">Available for Freelance &amp; Full-time</span>
-<h1>Creative Vision <span class="accent">Meets Motion</span></h1>
-<div class="lead">Graphic Designer • Video Editor • Motion Graphics Artist</div>
-<p class="desc">I craft cinematic visual stories that captivate audiences and drive results. From brand identity to social media content, I transform ideas into compelling visuals that resonate.</p>
+    <div class="hud-side" aria-hidden="true"><span>THREE-DIMENSIONAL STUDY</span><span class="hud-side-line"></span><span>IN REAL TIME</span></div>
 
+    <footer class="bottom-hud shell">
+      <div class="reactivity">
+        <span class="reactivity-icon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="reactivity-text"><strong id="sceneStatus" role="status" aria-live="polite">MOVE TO INTERACT</strong><small id="sceneSubstatus">A field that responds to you</small></span>
+        <span class="reactivity-meter" aria-hidden="true"><span id="energyFill"></span></span>
+        <span class="energy-number" id="energyValue">00%</span>
+      </div>
+      <div class="scene-controls">
+        <div class="strength-control"><label for="strengthSlider">FORCE</label><input id="strengthSlider" type="range" min="20" max="100" value="67" step="1" aria-label="Magnetic field strength"></div>
+        <button class="control color-control" id="paletteBtn" type="button" aria-label="Change color palette"><span class="color-indicator" id="colorIndicator"></span><span id="paletteName">IRIS / 01</span><span aria-hidden="true">↻</span></button>
+        <button class="square-control" id="pauseBtn" type="button" aria-label="Pause motion" aria-pressed="false" title="Pause or resume animation"><span id="pauseIcon" aria-hidden="true">Ⅱ</span></button>
+        <button class="square-control fullscreen-control" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen" title="Fullscreen"><span aria-hidden="true">⛶</span></button>
+      </div>
+    </footer>
+    <div class="mobile-hint">DRAG TO DISTURB THE FIELD <span aria-hidden="true">↗</span></div>
+    <div class="edge-index" aria-hidden="true">48° / 72° / ∞</div>
+  </main>
 
-<div class="ctas">
-<button class="cta-primary" onclick="document.getElementById('work').scrollIntoView({behavior:'smooth'})">View My Work ➜</button>
-<button class="cta-ghost" onclick="location.href='mailto:hello@example.com?subject=Work%20Inquiry'">Let's Talk</button>
-</div>
-</div>
-
-
-<div style="position:relative;z-index:10">
-<div class="showreel" role="button" aria-label="Open showreel" tabindex="0" id="openShowreel">
-<!-- If you want the exact image from the design, place the screenshot file in the same folder and name it exactly: "Screenshot 2026-01-15 153042.png" -->
-<img src="Screenshot 2026-01-15 153042.png" alt="Hero visual" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.06;pointer-events:none">
-<div class="play" aria-hidden="true"></div>
-<div class="label">Showreel Preview</div>
-</div>
-</div>
-
-
-<div class="hero-bg" aria-hidden="true"></div>
-</main>
-
-
-<section id="work" style="padding:80px 6vw;background:linear-gradient(180deg,transparent 0%, rgba(255,255,255,0.01) 100%);">
-<div style="max-width:1100px;margin:0 auto;color:rgba(255,255,255,0.9)">
-<h2 style="margin:0 0 18px">Selected Projects</h2>
-<p style="color:var(--muted);margin:0 0 28px;max-width:820px">(Placeholder) — Add your projects here. Each project card can include an image, short description, tools used, and a link to details or case study.</p>
-<!-- Minimal project grid placeholder -->
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;">
-<div style="background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;min-height:160px">Project 1</div>
-<div style="background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;min-height:160px">Project 2</div>
-<div style="background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;min-height:160px">Project 3</div>
-</div>
-</div>
-</section>
-
-
-<div class="credit">Built with ❤️ — HTML / CSS / JS</div>
-
-
-<!-- Modal for showreel -->
-<div class="modal" id="modal">
-<button class="close" id="closeModal" aria-label="Close video">✕</button>
-<div class="modal-card" role="dialog" aria-modal="true">
-<!-- Replace the src with your showreel url or an MP4 hosted file. This example uses a public YouTube video. -->
-<iframe id="videoFrame" src="https://www.youtube.com/embed/ScMzIvxBSi4?rel=0&autoplay=1" title="Showreel" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-</div>
-</div>
-<script src="script.js"></script>
+  <div class="modal" id="videoModal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><h2 id="modalTitle">SELECTED WORK / GEN5ROM</h2><button type="button" id="closeModal" aria-label="Close video">✕</button></div>
+      <div class="modal-video" id="modalVideo"></div>
+      <div class="modal-footer"><a href="https://harnarayan-gen5rom.github.io/GEN5ROM/" target="_blank" rel="noopener noreferrer">Explore full portfolio ↗</a><span>ESC TO CLOSE</span></div>
+    </div>
+  </div>
+  <noscript><p class="noscript">JavaScript enables the interactive 3D scene. You can still explore the <a href="https://harnarayan-gen5rom.github.io/GEN5ROM/">full portfolio here</a>.</p></noscript>
 </body>
 </html>
