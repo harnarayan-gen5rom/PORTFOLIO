@@ -118,6 +118,9 @@ function locate(clientX,clientY){
      fallback.children[i].style.setProperty("--lift",(influence*48).toFixed(1)+"px");
      fallback.children[i].style.filter="brightness("+(1+influence*.82).toFixed(2)+")";
    }
+   const distance=Math.hypot((cursor.x-.70)*1.25,(cursor.y-.49)*1.3);
+   energy=clamp(.08+Math.max(0,1-distance)*.70,0,1);
+   updateHud();
  }
  requestFrame();
 }
@@ -271,6 +274,7 @@ function fitScene(){
  if(!renderer||!camera)return;
  const w=Math.max(1,experience.clientWidth),h=Math.max(1,experience.clientHeight);
  renderer.setSize(w,h,false);
+ camera.aspect=w/h;
  const worldH=(rows-.3)*stepY;
  const worldW=worldH*w/h;
  camera.left=-worldW/2;camera.right=worldW/2;camera.top=worldH/2;camera.bottom=-worldH/2;
