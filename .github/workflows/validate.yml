@@ -72,7 +72,18 @@ jobs:
               console.log('3D ready:',await desktop.locator('#riftStage').evaluate(el=>el.classList.contains('ready')));
               await desktop.screenshot({path:'rift-desktop.png',fullPage:false});
               await desktop.locator('#riftEnter').click();
-              await desktop.locator('#riftGalleryUi').waitFor({state:'visible',timeout:18000});
+              await desktop.waitForTimeout(3200);
+              const diagnostic=await desktop.evaluate(()=>({
+                riftState:document.querySelector('#riftState')?.textContent,
+                buttonText:document.querySelector('#riftEnter')?.textContent,
+                disabled:document.querySelector('#riftEnter')?.disabled,
+                galleryHidden:document.querySelector('#riftGalleryUi')?.hidden,
+                stageReady:document.querySelector('#riftStage')?.classList.contains('ready'),
+                scrollY:window.scrollY,
+                rect:document.querySelector('#rift')?.getBoundingClientRect().top
+              }));
+              console.log('RIFT DIAGNOSTIC',JSON.stringify(diagnostic),'BROWSER ERRORS',JSON.stringify(errors));
+              await desktop.locator('#riftGalleryUi').waitFor({state:'visible',timeout:6000});
               await desktop.locator('#riftProjectNav [data-project="0"]').click();
               await desktop.locator('#riftModal').waitFor({state:'visible'});
               await desktop.locator('#riftModalClose').click();
