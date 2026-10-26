@@ -140,3 +140,11 @@ html{scroll-snap-type:y proximity}
 @media(max-width:380px){.rift-mark{font-size:10px}.rift-mark b{display:none}.rift-nav nav{gap:8px}.rift-nav nav a,.rift-nav nav button{font-size:7px}.rift-copy h2{font-size:3.22rem}.rift-gallery-heading h2{font-size:2.4rem}.rift-project-nav button strong{font-size:7px}}
 @media(hover:none),(pointer:coarse){.rift-section{touch-action:pan-y}.rift-smoke{filter:blur(30px)}}
 @media(prefers-reduced-motion:reduce){.rift-fallback-core,.rift-fallback-rings{animation:none!important}#riftCanvas,.rift-fallback,.rift-gallery-ui{transition:none!important}}
+
+/* Discoverable, minimal connection between the two fullscreen experiences. */
+.prism-next-scene{position:absolute;z-index:44;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:5px;min-width:130px;text-align:center;color:#d8c5e3;transition:color .25s,transform .3s}
+.prism-next-scene span{font:500 8px "DM Mono",monospace;letter-spacing:.15em;color:#9990ae}
+.prism-next-scene strong{font:600 9px "DM Mono",monospace;letter-spacing:.09em}
+.prism-next-scene:hover{color:#f4c5ff;transform:translate(-50%,-3px)}
+.prism-rift-link{color:#e9c1ff!important}
+@media(max-width:820px){.prism-next-scene{display:none}}
