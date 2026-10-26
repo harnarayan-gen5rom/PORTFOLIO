@@ -109,6 +109,14 @@ function openRift(){
  }
  mode="rupturing";shock=1;
  entry.disabled=true;entry.textContent="OPENING THE RIFT…";
+ // UI completion is scheduled on wall time, not on how quickly a GPU can draw frames.
+ // Particularly important for older integrated GPUs and software WebGL.
+ setTimeout(()=>{
+   if(mode!=="rupturing")return;
+   transition=1;mode="gallery";galleryVisible(true);
+   $("#riftPageIndex").textContent="03 / 03";
+   showInfo();request();
+ },2700);
  request();
 }
 function returnAnomaly(){
@@ -210,7 +218,7 @@ function buildMachine(){
   // Physically modeled layered armor teeth: individually beveled facets, not texture-only detail.
   const armorMat=materials[(i+1)%3];
   const armorGeometry=new THREE.BoxGeometry(.20,.23,.105,1,1,1);
-  for(let tooth=0;tooth<3;tooth++){
+  for(let tooth=0;tooth<(lowPower?1:3);tooth++){
     const plate=new THREE.Mesh(armorGeometry,armorMat);
     const y=.84+tooth*(profile.length-.98)/3;
     plate.position.set(-.038+(tooth%2)*.07,y,.18+(tooth%2)*.025);
@@ -478,9 +486,9 @@ function tick(now){
  prior=now;time+=dt;frameNumber++;
  // Transitions use actual wall-clock delta, while physical spring integration is clamped.
  if(elapsedSeconds>.085)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
- if(slowFrames>=7&&!qualityReduced){
+ if(slowFrames>=3&&!qualityReduced){
    qualityReduced=true;
-   renderer.setPixelRatio(Math.min(1,devicePixelRatio||1));
+   renderer.setPixelRatio(Math.min(.85,devicePixelRatio||1));
    renderer.setSize(Math.max(1,section.clientWidth),Math.max(1,section.clientHeight),false);
  }
  const origin=center();
