@@ -1,0 +1,38 @@
+name: Validate 3D website
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript syntax
+        run: |
+          node --check script.js
+          node --check scene.js
+          node --check rift.js
+      - name: Verify both full-screen sections and all assets
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const assert = require('assert/strict');
+          const html = fs.readFileSync('index.html','utf8');
+          for (const id of ['experience','sceneCanvas','rift','riftCanvas','riftGalleryUi','riftModal','riftEnter','riftBack','videoModal']) {
+            assert.ok(html.includes('id="'+id+'"'), 'Missing required element: '+id);
+          }
+          for (const filename of ['style.css','script.js','scene.js','rift.css','rift.js']) {
+            assert.ok(fs.statSync(filename).size > 100, 'Missing/empty file: '+filename);
+            assert.ok(html.includes(filename), 'Asset not referenced: '+filename);
+          }
+          const scenes=fs.readFileSync('rift.js','utf8');
+          assert.match(scenes,/new THREE.ExtrudeGeometry/,'Mechanical blades missing');
+          assert.match(scenes,/new THREE.ShaderMaterial/,'Energy shader missing');
+          assert.match(scenes,/spring\(p,amount,dt\)/,'Proximity spring missing');
+          assert.match(scenes,/buildGallery\(\)/,'Project gallery missing');
+          console.log('All static website checks passed.');
+          NODE
