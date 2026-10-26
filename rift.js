@@ -25,7 +25,7 @@ let THREE,renderer,scene,camera,raycaster,plane,mech,blades=[],rings=[],filament
 let core,coreGlow,coreRing,shockRing,coreLight,cursorLight,bladed,orbital;
 let fragments,fragNode,fragSeed,fragSize,points,pointsGeo,pointsBase,pointsMaterial;
 let gallery,projectCards=[],projectTargets=[],galleryLamp,resizeObs;
-let loaded=false,loading=false,visible=false,frame=0,prior=0,time=0,hot=0,shock=0,transition=0;
+let loaded=false,loading=false,visible=false,frame=0,prior=0,time=0,hot=0,shock=0,transition=0,slowFrames=0,qualityReduced=false;
 let mode="anomaly",overProject=-1,modalOpen=false,previousFocus=null,oldOverflow="";
 let pointerActive=false,touchDrag=false,pressOrigin=null,lastInfo=0,frameNumber=0;
 const cursor={x:.72,y:.48,worldX:0,worldY:0},smooth={x:.72,y:.48,worldX:0,worldY:0};
@@ -473,7 +473,16 @@ function updateFragments(openFactor){
 }
 function tick(now){
  frame=0;if(!loaded||!visible||modalOpen||document.hidden)return;
- const dt=prior?clamp((now-prior)/1000,.001,.05):.016;prior=now;time+=dt;frameNumber++;
+ const elapsedSeconds=prior?clamp((now-prior)/1000,.001,.45):.016;
+ const dt=Math.min(elapsedSeconds,.05);
+ prior=now;time+=dt;frameNumber++;
+ // Transitions use actual wall-clock delta, while physical spring integration is clamped.
+ if(elapsedSeconds>.085)slowFrames++;else slowFrames=Math.max(0,slowFrames-1);
+ if(slowFrames>=7&&!qualityReduced){
+   qualityReduced=true;
+   renderer.setPixelRatio(Math.min(1,devicePixelRatio||1));
+   renderer.setSize(Math.max(1,section.clientWidth),Math.max(1,section.clientHeight),false);
+ }
  const origin=center();
  smooth.x=damp(smooth.x,pointerActive?cursor.x:.73,4.4,dt);
  smooth.y=damp(smooth.y,pointerActive?cursor.y:.48,4.4,dt);
@@ -481,10 +490,10 @@ function tick(now){
  smooth.worldY=damp(smooth.worldY,pointerActive?cursor.worldY:origin.y,5.3,dt);
  const near=pointerActive?Math.pow(clamp(1-Math.hypot(smooth.worldX-origin.x,smooth.worldY-origin.y)/4.8,0,1),1.25):0;
  hot=damp(hot,mode==="anomaly"?near+shock*.18:.05,4.2,dt);shock=Math.max(0,shock-dt*.9);
- if(mode==="rupturing"){transition=clamp(transition+dt/2.2,0,1);if(transition===1){
+ if(mode==="rupturing"){transition=clamp(transition+elapsedSeconds/2.2,0,1);if(transition===1){
   mode="gallery";galleryVisible(true);$("#riftPageIndex").textContent="03 / 03";
  }}
- else if(mode==="reforming"){transition=clamp(transition-dt/1.65,0,1);if(transition===0){
+ else if(mode==="reforming"){transition=clamp(transition-elapsedSeconds/1.65,0,1);if(transition===0){
    mode="anomaly";rearmed();
  }}
  const factor=ease(transition),mx=smooth.worldX-origin.x,my=smooth.worldY-origin.y;
