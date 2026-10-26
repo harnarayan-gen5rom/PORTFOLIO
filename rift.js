@@ -22,7 +22,7 @@ const videos=[
  {title:"SHORT FORM 02",desc:"GEN5ROM short-form editing sample.",id:"1AOYe9wDsU4",url:"https://youtube.com/shorts/1AOYe9wDsU4"}
 ];
 let THREE,renderer,scene,camera,raycaster,plane,mech,blades=[],rings=[],filaments=[],cursorCables=[];
-let core,coreGlow,coreRing,coreLight,cursorLight,bladed,orbital;
+let core,coreGlow,coreRing,shockRing,coreLight,cursorLight,bladed,orbital;
 let fragments,fragNode,fragSeed,fragSize,points,pointsGeo,pointsBase,pointsMaterial;
 let gallery,projectCards=[],projectTargets=[],galleryLamp,resizeObs;
 let loaded=false,loading=false,visible=false,frame=0,prior=0,time=0,hot=0,shock=0,transition=0;
@@ -207,6 +207,17 @@ function buildMachine(){
   const strip=new THREE.Mesh(new THREE.BoxGeometry(.066,profile.length*.4,.045),
     new THREE.MeshStandardMaterial({color:0x0a0b10,metalness:.72,roughness:.40}));
   strip.position.set(.075,profile.length*.43,.165);group.add(strip);
+  // Physically modeled layered armor teeth: individually beveled facets, not texture-only detail.
+  const armorMat=materials[(i+1)%3];
+  const armorGeometry=new THREE.BoxGeometry(.20,.23,.105,1,1,1);
+  for(let tooth=0;tooth<3;tooth++){
+    const plate=new THREE.Mesh(armorGeometry,armorMat);
+    const y=.84+tooth*(profile.length-.98)/3;
+    plate.position.set(-.038+(tooth%2)*.07,y,.18+(tooth%2)*.025);
+    plate.rotation.z=.19*(tooth%2?1:-1)+(rand(i+tooth+13)-.5)*.13;
+    plate.scale.set(1+.2*rand(i+tooth),1.0+.4*rand(i+tooth+77),1);
+    group.add(plate);
+  }
   group.rotation.z=a;group.scale.set(.86+rand(i+20)*.28,.81+rand(i+5)*.40,1);
   group.position.z=(i%7-3)*.11;bladed.add(group);
   blades.push({group,a,seed:i,length:profile.length*group.scale.y,z:group.position.z,v:0,ext:0,twist:0,tilt:0});
@@ -252,6 +263,24 @@ function buildMachine(){
  coreGlow.scale.set(3.7,3.7,1);coreGlow.position.z=-.08;mech.add(coreGlow);
  coreRing=new THREE.Mesh(new THREE.TorusGeometry(.85,.012,6,100),new THREE.MeshBasicMaterial({color:0xff1838,transparent:true,opacity:.72,depthWrite:false,blending:THREE.AdditiveBlending}));
  mech.add(coreRing);
+ // Independent mechanical hub clips and recessed retention bolts.
+ const hubMetal=new THREE.MeshPhysicalMaterial({color:0x3c3d44,metalness:.87,roughness:.28,clearcoat:.82});
+ const clipGeo=new THREE.BoxGeometry(.28,.11,.22);
+ const boltGeo=new THREE.CylinderGeometry(.032,.032,.07,7);
+ for(let i=0;i<12;i++){
+   const angle=i*Math.PI/6;
+   const clip=new THREE.Mesh(clipGeo,hubMetal);
+   clip.position.set(Math.cos(angle)*.86,Math.sin(angle)*.86,.09);
+   clip.rotation.z=angle;
+   mech.add(clip);
+   const bolt=new THREE.Mesh(boltGeo,hubMetal);
+   bolt.rotation.x=Math.PI/2;
+   bolt.position.set(Math.cos(angle)*.85,Math.sin(angle)*.85,.23);
+   mech.add(bolt);
+ }
+ shockRing=new THREE.Mesh(new THREE.TorusGeometry(1,.008,4,90),
+   new THREE.MeshBasicMaterial({color:0xff526b,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+ shockRing.position.z=.26;mech.add(shockRing);
  const lineMat=new THREE.LineBasicMaterial({color:0xff3650,opacity:.42,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
  for(let i=0;i<(coarse?7:13);i++){
   const count=25,arr=new Float32Array(count*3),geom=new THREE.BufferGeometry();
@@ -482,6 +511,11 @@ function tick(now){
  coreGlow.scale.set(3.7+hot*.5+factor*2,3.7+hot*.5+factor*2,1);
  coreGlow.material.opacity=.49+hot*.23+shock*.10+factor*.20;
  coreRing.rotation.z=time*.1;coreRing.material.opacity=.6+hot*.32;
+ if(shockRing){
+   shockRing.scale.setScalar(1+(1-shock)*6.5);
+   shockRing.material.opacity=.46*shock;
+   shockRing.visible=shock>.003;
+ }
  const scale=(small()?.82:1)*(1-factor*.74);
  mech.scale.setScalar(scale);mech.position.set(origin.x,origin.y,-factor*.5);
  coreLight.position.set(origin.x+core.position.x,origin.y+core.position.y,3.5);
